@@ -9,7 +9,9 @@ package com.github.carya.util;
 import com.github.carya.exception.ExcelValidationException;
 import com.github.carya.metadata.ExcelFileType;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.IOException;
@@ -34,10 +36,10 @@ public class ExcelUtils {
         try {
             switch (fileType) {
                 case XLS:
-                    workbook = null != in ? new HSSFWorkbook(in) : new HSSFWorkbook();
+                    workbook = null != in ? new HSSFWorkbook(new POIFSFileSystem(in)) : new HSSFWorkbook();
                     break;
                 case XLSX:
-                    workbook = null != in ? new XSSFWorkbook(in) : new XSSFWorkbook();
+                    workbook = null != in ? new SXSSFWorkbook(new XSSFWorkbook(in)) : new SXSSFWorkbook(500);
                     break;
             }
         } catch (IOException e) {

@@ -7,7 +7,10 @@
 package com.github.carya.writer;
 
 import com.github.carya.metadata.ExcelFileType;
+import com.github.carya.metadata.ExcelHeader;
 import com.github.carya.util.ExcelUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -24,12 +27,34 @@ public class StandardExcelWriter implements ExcelWriter {
     public Workbook writeExcel(String fileName, ExcelFileType fileType, String strategyName, Collection<ExcelWriterBucket<?>> buckets) {
         // 创建workbook
         Workbook workbook = ExcelUtils.buildWorkbook(fileType);
+        applyStyle(workbook);
 
         // 生成excel
         buckets.forEach(bucket -> {
             Sheet sheet = workbook.createSheet(bucket.getName());
 
+            ExcelHeader header = bucket.getHeader();
+
+            // 是否生成标题
+            if (header.isNeedHeader()) {
+                Row row = sheet.createRow(0);
+            }
+
         });
+
         return null;
+    }
+
+    protected void applyStyle(Workbook workbook) {
+
+    }
+
+    private Cell createHeaderCell(Sheet sheet, Row row, int index, Object value, String style, short width) {
+        Cell cell = row.createCell(index);
+        cell.setCellValue(String.valueOf(value));
+
+        sheet.setColumnWidth(index, new Integer(width * 200));
+
+        return cell;
     }
 }

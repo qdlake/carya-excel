@@ -18,28 +18,21 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface ExcelField {
-
-    /**
-     * 列标题(label为空时使用title作为标题)
+public @interface ExcelColumn {
+    /**(label为空时使用title作为标题)
      * @return 列标题
      */
     String title();
 
     /**
-     * 列国际化标签(优先使用label)
-     * @return 列国际化标签
+     * 列号(从0开始)
+     * @return 列号
      */
-    String label() default "";
+    int index() default 99999;
 
     /**
-     * 列位置
-     * @return 列位置
-     */
-    int index() default Integer.MAX_VALUE;
-
-    /**
-     * 列宽度
+     * 列宽度(当开启自适应列宽，则width失效)
+     * @see ExcelProperty
      * @return 列宽度
      */
     short width() default 15;
