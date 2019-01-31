@@ -44,14 +44,9 @@ public class ExcelCellStyle {
     private IndexedColors bgColor;
 
     /**
-     * 标题字体
+     * 单元格字体
      */
-    private ExcelCellFont headerFont;
-
-    /**
-     * 数据字体
-     */
-    private ExcelCellFont dataFont;
+    private ExcelCellFont font;
 
     /**
      * 是否换行
@@ -91,8 +86,7 @@ public class ExcelCellStyle {
                 .withBorderStyle(format.borderStyle())
                 .withBorderColor(format.borderColor())
                 .withBgColor(format.bgColor())
-                .withHeaderFont(ExcelCellFont.of(format.headerFont()))
-                .withDataFont(ExcelCellFont.of(format.dataFont()))
+                .withFont(ExcelCellFont.of(format.font()))
                 .withWrapText(format.wrapText())
         );
     }
@@ -103,8 +97,7 @@ public class ExcelCellStyle {
         this.borderStyle = BorderStyle.NONE;
         this.borderColor = IndexedColors.WHITE;
         this.bgColor = IndexedColors.WHITE;
-        this.headerFont = ExcelCellFont.create(builder -> builder.withBold(true));
-        this.dataFont = ExcelCellFont.create();
+        this.font = ExcelCellFont.create();
         this.wrapText = false;
 
         if (null == buildingFunction) {
@@ -143,14 +136,8 @@ public class ExcelCellStyle {
             }
 
             @Override
-            public Builder withHeaderFont(ExcelCellFont headerFont) {
-                ExcelCellStyle.this.headerFont = headerFont;
-                return this;
-            }
-
-            @Override
-            public Builder withDataFont(ExcelCellFont dataFont) {
-                ExcelCellStyle.this.dataFont = dataFont;
+            public Builder withFont(ExcelCellFont font) {
+                ExcelCellStyle.this.font = font;
                 return this;
             }
 
@@ -199,18 +186,11 @@ public class ExcelCellStyle {
         Builder withBgColor(IndexedColors bgColor);
 
         /**
-         * 设置标题字体
-         * @param headerFont 标题字体
+         * 设置字体
+         * @param font 字体
          * @return
          */
-        Builder withHeaderFont(ExcelCellFont headerFont);
-
-        /**
-         * 设置数据字体
-         * @param dataFont 数据字体
-         * @return
-         */
-        Builder withDataFont(ExcelCellFont dataFont);
+        Builder withFont(ExcelCellFont font);
 
         /**
          * 设置是否换行
@@ -224,10 +204,9 @@ public class ExcelCellStyle {
      * 装饰样式
      * @param cellStyle POI单元格样式
      * @param font POI字体
-     * @param isHeader 是否为标题
      * @return see {@link CellStyle}
      */
-    public CellStyle decorate(CellStyle cellStyle, Font font, boolean isHeader) {
+    public CellStyle decorate(CellStyle cellStyle, Font font) {
         // 居中方式
         cellStyle.setAlignment(getAlign());
         cellStyle.setVerticalAlignment(getValign());
@@ -243,11 +222,7 @@ public class ExcelCellStyle {
         cellStyle.setTopBorderColor(getBorderColor().getIndex());
 
         // 设置字体
-        if (isHeader) {
-            cellStyle.setFont(getHeaderFont().decorate(font));
-        } else {
-            cellStyle.setFont(getDataFont().decorate(font));
-        }
+        cellStyle.setFont(getFont().decorate(font));
 
         // 设置单元格是否换行
         cellStyle.setWrapText(isWrapText());
@@ -299,19 +274,11 @@ public class ExcelCellStyle {
     }
 
     /**
-     * 返回标题字体
-     * @return 标题字体
+     * 返回字体
+     * @return 字体
      */
-    public ExcelCellFont getHeaderFont() {
-        return headerFont;
-    }
-
-    /**
-     * 返回数据字体
-     * @return 数据字体
-     */
-    public ExcelCellFont getDataFont() {
-        return dataFont;
+    public ExcelCellFont getFont() {
+        return font;
     }
 
     /**

@@ -57,16 +57,10 @@ public @interface CellStyleFormat {
     IndexedColors bgColor() default IndexedColors.WHITE;
 
     /**
-     * 标题字体，默认为粗体
-     * @return see {@link CellFontFormat}
-     */
-    CellFontFormat headerFont() default @CellFontFormat(bold = true);
-
-    /**
      * 单元格字体
      * @return see {@link CellFontFormat}
      */
-    CellFontFormat dataFont() default @CellFontFormat();
+    CellFontFormat font() default @CellFontFormat();
 
     /**
      * 单元格是否换行，默认为否

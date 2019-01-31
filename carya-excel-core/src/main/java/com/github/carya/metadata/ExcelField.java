@@ -8,6 +8,10 @@ package com.github.carya.metadata;
 
 import com.github.carya.annotation.CellStyleFormat;
 import com.github.carya.annotation.ExcelColumn;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.util.StringUtil;
 
 import java.lang.reflect.Field;
 import java.util.function.Consumer;
@@ -78,10 +82,39 @@ public class ExcelField implements Comparable<ExcelField> {
     }
 
     public interface Builder {
+        /**
+         * 设置标题
+         * @param title 标题
+         * @return
+         */
         Builder withTitle(String title);
+
+        /**
+         * 设置列号
+         * @param index 列号
+         * @return
+         */
         Builder withIndex(int index);
+
+        /**
+         * 设置列宽
+         * @param width 列宽
+         * @return
+         */
         Builder withWidth(short width);
+
+        /**
+         * 设置格式化
+         * @param format 格式化
+         * @return
+         */
         Builder withFormat(String format);
+
+        /**
+         * 设置单元格样式
+         * @param style 单元格样式
+         * @return
+         */
         Builder withStyle(ExcelCellStyle style);
     }
 
@@ -133,6 +166,13 @@ public class ExcelField implements Comparable<ExcelField> {
                 return this;
             }
         });
+    }
+
+    public CellStyle decorate(CellStyle cellStyle, DataFormat dataFormat) {
+        if (StringUtils.isNotBlank(getFormat())) {
+            cellStyle.setDataFormat(dataFormat.getFormat(getFormat()));
+        }
+        return cellStyle;
     }
 
     /**

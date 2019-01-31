@@ -9,12 +9,10 @@ package com.github.carya.writer;
 import com.github.carya.metadata.ExcelFileType;
 import com.github.carya.metadata.ExcelHeader;
 import com.github.carya.util.ExcelUtils;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * 接口{@link ExcelWriter}的标准实现
@@ -23,6 +21,8 @@ import java.util.Collection;
  * @version 3.0, 2019-01-28 11:32
  */
 public class StandardExcelWriter implements ExcelWriter {
+    protected static HashMap<String, CellStyle> styleMap = new HashMap<>();
+
     @Override
     public Workbook writeExcel(String fileName, ExcelFileType fileType, String strategyName, Collection<ExcelWriterBucket<?>> buckets) {
         // 创建workbook
@@ -47,14 +47,5 @@ public class StandardExcelWriter implements ExcelWriter {
 
     protected void applyStyle(Workbook workbook) {
 
-    }
-
-    private Cell createHeaderCell(Sheet sheet, Row row, int index, Object value, String style, short width) {
-        Cell cell = row.createCell(index);
-        cell.setCellValue(String.valueOf(value));
-
-        sheet.setColumnWidth(index, new Integer(width * 200));
-
-        return cell;
     }
 }
